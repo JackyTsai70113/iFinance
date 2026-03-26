@@ -71,7 +71,7 @@ class _BudgetCard extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: store.budgetProgress,
                 minHeight: 16,
-                backgroundColor: Colors.grey.withValues(alpha: 0.15),
+                backgroundColor: Colors.grey.withOpacity(0.15),
                 color: _budgetColor(store.budgetProgress),
               ),
             ),

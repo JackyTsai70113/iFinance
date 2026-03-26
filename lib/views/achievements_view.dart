@@ -87,7 +87,7 @@ class _LevelCard extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: xp / 100.0,
                     minHeight: 12,
-                    backgroundColor: Colors.orange.withValues(alpha: 0.15),
+                    backgroundColor: Colors.orange.withOpacity(0.15),
                     color: Colors.orange,
                   ),
                 ),
@@ -200,14 +200,14 @@ class _AchievementBadge extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isUnlocked
-                  ? achievement.color.withValues(alpha: 0.15)
-                  : Colors.grey.withValues(alpha: 0.1),
+                  ? achievement.color.withOpacity(0.15)
+                  : Colors.grey.withOpacity(0.1),
             ),
             child: Icon(
               achievement.icon,
               color: isUnlocked
                   ? achievement.color
-                  : Colors.grey.withValues(alpha: 0.4),
+                  : Colors.grey.withOpacity(0.4),
               size: 28,
             ),
           ),

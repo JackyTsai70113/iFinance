@@ -11,26 +11,13 @@ build/
 .metadata
 pubspec.lock
 
-# Android
-android/.gradle/
-android/local.properties
-android/app/debug/
-android/app/profile/
-android/app/release/
-
-# iOS (Flutter generated)
-ios/Pods/
-ios/.symlinks/
-ios/Flutter/Flutter.framework
-ios/Flutter/Flutter.podspec
-ios/Runner.xcworkspace/xcuserdata/
-ios/Runner.xcodeproj/xcuserdata/
-
-# Xcode (legacy SwiftUI)
-DerivedData/
-*.xcodeproj/xcuserdata/
-*.xcworkspace/xcuserdata/
-xcuserdata/
+# Flutter generated platform dirs (re-generate with `flutter create .`)
+android/
+ios/
+web/
+macos/
+linux/
+windows/
 
 # .NET
 server/bin/
@@ -41,3 +28,5 @@ server/ifinance.db
 .vs/
 .vscode/
 .idea/
+DerivedData/
+xcuserdata/

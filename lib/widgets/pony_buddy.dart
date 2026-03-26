@@ -160,7 +160,7 @@ class _PonyBuddyState extends State<PonyBuddy> with TickerProviderStateMixin {
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                          color: Colors.orange.withValues(alpha: 0.3)),
+                          color: Colors.orange.withOpacity(0.3)),
                     ),
                     child: Text(
                       _currentMessage,
@@ -274,7 +274,7 @@ class _PonyPainter extends CustomPainter {
 
     // Ears
     final earPaint = Paint()..color = const Color(0xFFE6B373);
-    final earInnerPaint = Paint()..color = Colors.pink.withValues(alpha: 0.3);
+    final earInnerPaint = Paint()..color = Colors.pink.withOpacity(0.3);
     // Left ear
     _drawEar(canvas, Offset(cx - 14, 4), earPaint, earInnerPaint);
     // Right ear
@@ -359,7 +359,7 @@ class _PonyPainter extends CustomPainter {
 
     // Cheeks
     final cheekPaint = Paint()
-      ..color = Colors.pink.withValues(alpha: cheekGlow ? 0.45 : 0.2);
+      ..color = Colors.pink.withOpacity(cheekGlow ? 0.45 : 0.2);
     canvas.drawCircle(Offset(cx - 14, 26), 3.5, cheekPaint);
     canvas.drawCircle(Offset(cx + 14, 26), 3.5, cheekPaint);
 

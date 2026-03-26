@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:confetti_widget/confetti_widget.dart';
 import '../stores/app_store.dart';
 import '../models/category.dart';
 import '../widgets/pony_buddy.dart';
+import '../widgets/celebration.dart';
 import 'add_transaction_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -14,24 +14,11 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  late ConfettiController _confettiController;
   String _ponyReaction = 'idle';
-
-  @override
-  void initState() {
-    super.initState();
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 2));
-  }
-
-  @override
-  void dispose() {
-    _confettiController.dispose();
-    super.dispose();
-  }
+  bool _showConfetti = false;
 
   void _onCelebration(AppStore store) {
-    _confettiController.play();
+    setState(() => _showConfetti = true);
     final t = store.lastAddedTransaction;
     if (t != null) {
       if (t.type.name == 'income') {
@@ -46,19 +33,16 @@ class _HomeViewState extends State<HomeView> {
         if (mounted) setState(() => _ponyReaction = 'idle');
       });
     }
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) store.dismissCelebration();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final store = context.watch<AppStore>();
 
-    // Trigger celebration when flag is set
     if (store.showCelebration) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _onCelebration(store);
+        store.dismissCelebration();
       });
     }
 
@@ -77,11 +61,9 @@ class _HomeViewState extends State<HomeView> {
           ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              // Streak banner
               if (store.streakDays > 0) _StreakBanner(days: store.streakDays),
               if (store.streakDays > 0) const SizedBox(height: 16),
 
-              // Summary card
               _SummaryCard(
                 balance: store.totalBalance,
                 income: store.totalIncome,
@@ -89,7 +71,6 @@ class _HomeViewState extends State<HomeView> {
               ),
               const SizedBox(height: 20),
 
-              // Recent transactions
               Text('最近交易',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
@@ -104,7 +85,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         Icon(Icons.inbox,
                             size: 48,
-                            color: Colors.grey.withValues(alpha: 0.5)),
+                            color: Colors.grey.withOpacity(0.5)),
                         const SizedBox(height: 12),
                         const Text('尚無交易紀錄',
                             style: TextStyle(color: Colors.grey)),
@@ -119,12 +100,10 @@ class _HomeViewState extends State<HomeView> {
                           child: _TransactionRow(transaction: t),
                         )),
 
-              // Extra space for pony
               const SizedBox(height: 100),
             ],
           ),
 
-          // Pony buddy
           Positioned(
             right: 8,
             bottom: 16,
@@ -135,21 +114,16 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
 
-          // Confetti
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              shouldLoop: false,
-              numberOfParticles: 30,
-              gravity: 0.3,
-              colors: const [
-                Colors.red, Colors.orange, Colors.yellow,
-                Colors.green, Colors.blue, Colors.purple, Colors.pink,
-              ],
+          if (_showConfetti)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CelebrationOverlay(
+                  onComplete: () {
+                    if (mounted) setState(() => _showConfetti = false);
+                  },
+                ),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -174,7 +148,7 @@ class _StreakBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.orange.withValues(alpha: 0.1),
+        color: Colors.orange.withOpacity(0.1),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -209,7 +183,7 @@ class _SummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),

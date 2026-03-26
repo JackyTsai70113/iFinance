@@ -103,7 +103,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? cat.color
-                            : cat.color.withValues(alpha: 0.15),
+                            : cat.color.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       transform: isSelected
