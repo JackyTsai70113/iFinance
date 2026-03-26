@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+xcuserdata/
+
+# .NET
+server/bin/
+server/obj/
+server/ifinance.db
+
+# IDE
+.vs/
+.vscode/
+.idea/
