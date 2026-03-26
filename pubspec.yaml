@@ -1,0 +1,27 @@
+name: ifinance
+description: 個人記帳 App，含遊戲化成就系統
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+  flutter: '>=3.27.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2
+  shared_preferences: ^2.3.3
+  fl_chart: ^0.70.2
+  intl: ^0.19.0
+  uuid: ^4.5.1
+  confetti_widget: ^0.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

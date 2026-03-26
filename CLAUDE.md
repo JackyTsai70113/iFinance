@@ -4,14 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-iFinance is a personal finance management app with a gamification system (XP, levels, streaks, achievements). The UI is entirely in Traditional Chinese (Taiwan). It consists of an iOS SwiftUI app and a .NET backend API.
+iFinance is a cross-platform personal finance management app with a gamification system (XP, levels, streaks, achievements). The UI is entirely in Traditional Chinese (Taiwan). It consists of a Flutter mobile app and a .NET backend API.
 
 ## Build & Run Commands
 
-### iOS App
-- **Build**: `xcodebuild -project iFinance.xcodeproj -scheme iFinance -sdk iphonesimulator build`
-- **Run tests**: `xcodebuild -project iFinance.xcodeproj -scheme iFinance -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16' test`
-- **Run single test**: `xcodebuild test -project iFinance.xcodeproj -scheme iFinance -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:iFinanceTests/TestClassName/testMethodName`
+### Flutter App
+- **Install dependencies**: `flutter pub get`
+- **Run on device/emulator**: `flutter run`
+- **Build Android APK**: `flutter build apk`
+- **Build iOS**: `flutter build ios` (requires Mac + Xcode)
+- **Run tests**: `flutter test`
+- **Run single test**: `flutter test test/specific_test.dart`
+- **Analyze code**: `flutter analyze`
 
 ### .NET Server (in `server/`)
 - **Run**: `cd server && dotnet run`
@@ -20,21 +24,20 @@ iFinance is a personal finance management app with a gamification system (XP, le
 
 ## Architecture
 
-### iOS App (SwiftUI, iOS 17+)
+### Flutter App (Dart, Material 3)
 
-**State management**: Single `AppStore` class using `@Observable` macro. Persists all data to UserDefaults as JSON. No external dependencies.
+**State management**: `AppStore` class using `ChangeNotifier` + `Provider`. Persists all data to `SharedPreferences` as JSON. No external backend dependency.
 
-**Key flow**: `iFinanceApp` → `ContentView` (TabView) → three tabs:
-- `HomeView` – transaction list, summary card, pony mascot (`PonyBuddyView`)
-- `StatsView` – budget tracking with Charts framework pie chart
-- `AchievementsView` – level/XP progression, achievement badges
+**Structure**:
+- `lib/main.dart` – app entry point, `MainScreen` with bottom `NavigationBar` (3 tabs)
+- `lib/models/` – data classes: `Transaction`, `CategoryDef`, `AchievementDef`
+- `lib/stores/app_store.dart` – centralized state, persistence, business logic
+- `lib/views/` – full-screen pages: `HomeView`, `StatsView`, `AchievementsView`, `AddTransactionView`
+- `lib/widgets/` – reusable components: `PonyBuddy` (animated mascot with CustomPainter)
 
-**Data model** (`Models.swift`):
-- `Transaction` – id, amount, type (income/expense), category, date, note
-- `Category` – 13 expense + 3 income categories, each with icon and color
-- `AchievementDef` – 11 achievements unlocked by milestones (transaction count, streaks, balance, level)
+**Key dependencies**: `provider`, `shared_preferences`, `fl_chart` (pie chart), `confetti_widget`, `uuid`, `intl`
 
-**Gamification** (`AppStore.swift`): Adding a transaction grants XP, updates streaks (consecutive-day tracking), checks level-up thresholds, and evaluates achievement unlock conditions.
+**Gamification** (`app_store.dart`): Adding a transaction grants +10 XP, updates streaks (consecutive-day tracking), checks level-up thresholds, and evaluates achievement unlock conditions.
 
 ### .NET Server (`server/`)
 
@@ -47,8 +50,8 @@ Models in `server/Models/Transaction.cs`, DB context in `server/Data/AppDbContex
 
 ## Important Patterns
 
-- The iOS app is currently offline-first with local persistence only; the server exists for future sync capability
+- The Flutter app is offline-first with local persistence only; the server exists for future sync capability
 - All user-facing strings are hardcoded in Traditional Chinese — maintain this when adding UI text
-- `PonyBuddyView` is an animated mascot with context-aware messages based on financial state
-- `CelebrationView` provides confetti animation triggered on transaction addition
-- Test files exist but have only placeholder implementations
+- `PonyBuddy` widget uses `CustomPainter` to draw an animated pony mascot with context-aware messages
+- Categories: 12 expense + 3 income, defined in `lib/models/category.dart`
+- 11 achievements defined in `lib/models/achievement.dart`, unlocked by milestones
