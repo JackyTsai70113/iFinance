@@ -19,14 +19,25 @@ macos/
 linux/
 windows/
 
-# .NET
-server/bin/
-server/obj/
+# Python
+__pycache__/
+*.pyc
+venv/
 server/ifinance.db
 
 # IDE
-.vs/
 .vscode/
 .idea/
 DerivedData/
 xcuserdata/
+
+# 敏感:SQLite 資料庫(含實際交易資料)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# 敏感:環境變數(連線字串、API key)
+.env
+.env.local
+.env.*.local

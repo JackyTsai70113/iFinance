@@ -1,6 +1,0 @@
-@iFinance.API_HostAddress = http://localhost:5086
-
-GET {{iFinance.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
